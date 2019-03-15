@@ -1,7 +1,7 @@
 var path = require('path')
 var webpack = require('webpack')
-var PrerenderSpaPlugin = require('prerender-spa-plugin')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
+var PrerenderSpaPlugin = require('prerender-spa-plugin') // Here
+var HtmlWebpackPlugin = require('html-webpack-plugin') // And here
 
 module.exports = {
   entry: './src/main.js',
@@ -11,19 +11,17 @@ module.exports = {
     filename: 'build.js'
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.css$/,
         use: [
           'vue-style-loader',
           'css-loader'
         ],
-      },      {
+      }, {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          loaders: {
-          }
+          loaders: {}
           // other vue-loader options go here
         }
       },
@@ -71,11 +69,13 @@ if (process.env.NODE_ENV === 'production') {
       template: 'index.html',
       filename: path.resolve(__dirname, 'dist/index.html')
     }),
+
     new PrerenderSpaPlugin(
-      //Absolute path to compiled spa 
-      path.resolve(__dirname, '/dist'),
-      // List of routes 
+      // Absolute path to compiled SPA
+      path.resolve(__dirname, './dist'),
+      // List of routes to prerender
       ['/', '/about'],
+
       {
         postProcessHtml: function (context) {
           var titles = {
@@ -88,8 +88,9 @@ if (process.env.NODE_ENV === 'production') {
           )
         }
       }
-      
+
     ),
+
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       compress: {
